@@ -3,15 +3,15 @@
 !
 !  Modern Fortran version of the ZHANKS function from the paper:
 !
-!	Walter L. Anderson, (1979), "Numerical integration of related Hankel transforms 
-!	of orders 0 and 1 by adaptive digital filtering," GEOPHYSICS 44: 1287-1305.
-!	https://doi.org/10.1190/1.1441007
+!   Walter L. Anderson, (1979), "Numerical integration of related Hankel transforms 
+!   of orders 0 and 1 by adaptive digital filtering," GEOPHYSICS 44: 1287-1305.
+!   https://doi.org/10.1190/1.1441007
 !
-!	The original FORTRAN 77 code has been refactored and tested with the 
-!   driver program supplied with the paper. The results of the driver program
-!   corresponds largely with those of the paper. But, due to the fact that
-!   there is a single test, I cannot guarantee you the refactored code is working
-!   just like it should
+!  The original FORTRAN 77 code has been refactored and tested with the 
+!  driver program supplied with the paper. The results of the driver program
+!  corresponds largely with those of the paper. But, due to the fact that
+!  there is a single test, I cannot guarantee you the refactored code is working
+!  just like it should
 !
 !*******************************************************************************
 module hankel_module
@@ -197,11 +197,11 @@ module hankel_module
     integer :: n, new, nf
     real(dp) :: b, tol
     procedure(complex_function) :: fun
-	! local variables
+    ! local variables
     complex(dp), target :: c, cmax
     complex(dp) :: zhanks
     real(dp) :: y1, y, g
-	! e=dexp(.2d0), er=1.0d0/e
+    ! e=dexp(.2d0), er=1.0d0/e
     real(dp), parameter :: e=1.22140275816017_dp, er=0.818730753077982_dp
     real(dp), pointer :: t(:), tmax(:)
     logical :: key
@@ -211,23 +211,22 @@ module hankel_module
     isave=1
     nf = 0
     if (new == 1) nsave=0
-	! initialize kernel abscissa generation for given b
+    ! initialize kernel abscissa generation for given b
     zhanks=(0._dp,0._dp)
-    y1=0.735885266147979/b
+    y1=0.735885266147979_dp/b
     cmax=(0._dp,0_dp)
     c = (0._dp,0_dp)
     call c_f_pointer(cptr=c_loc(c), fptr=t, shape=[2])
     call c_f_pointer(cptr=c_loc(cmax), fptr=tmax, shape=[2])
-    nf=0
     y=y1
-	! begin right-side convolution at weight 131 (either new=1 or 0)
+    ! begin right-side convolution at weight 131 (either new=1 or 0)
     m=110
     i=131
     y=y*e
     key =.true.
-!
+
     do while (key)
-     ! save/retrieve pseudo-subroutine (call fun only when necessary)
+    ! save/retrieve pseudo-subroutine (call fun only when necessary)
       g=y
       if(new == 0) then
        convoluted_block : block
@@ -249,15 +248,15 @@ module hankel_module
          else 
            isave=isave+1
            do while (isave <= nsave)
-           if(g == gsave(isave)) then
-             c=fsave(isave)
-             isave=isave+1
-             call internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1,y, &
-                                  e,er,t,tmax,wt0,wt1,zhanks,key)
-             exit convoluted_block
-           endif
-           isave=isave+1
-           enddo
+            if(g == gsave(isave)) then
+              c=fsave(isave)
+              isave=isave+1
+              call internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1,y, &
+                                   e,er,t,tmax,wt0,wt1,zhanks,key)
+              exit convoluted_block
+            endif
+            isave=isave+1
+           end do
            isave=isave0
            nsave=nsave+1
            c=fun(g)
@@ -313,7 +312,7 @@ module hankel_module
       y=y*e
       if (i > 149) then
         if(tmax(1) == 0.0 .and. tmax(2) == 0.0) none=1
-		  ! establish truncation criterion (cmax=cmplx(tmax(1),tmax(2))
+        ! establish truncation criterion (cmax=cmplx(tmax(1),tmax(2))
         cmax=tol*cmax
         m=120
       endif
@@ -321,7 +320,7 @@ module hankel_module
       ! check for filter truncation at right end
       if(abs(t(1)) <= tmax(1) .and. abs(t(2)) <= tmax(2)) then
         y=y1
-		  ! continue with left-side convolution at weight 130
+	! continue with left-side convolution at weight 130
         m=140
         i=130
       else
