@@ -307,8 +307,8 @@ module hankel_module
     zhanks=zhanks+c
     select case (m)
     case (110)
-      tmax(1)=amax1(abs(t(1)),tmax(1))
-      tmax(2)=amax1(abs(t(2)),tmax(2))
+      tmax(1)=max(abs(t(1)),tmax(1))
+      tmax(2)=max(abs(t(2)),tmax(2))
       i=i+1
       y=y*e
       if (i > 149) then
