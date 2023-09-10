@@ -169,6 +169,9 @@ module hankel_module
    -2.5560176E-10, 2.2103233E-10,-1.9113891E-10, 1.6528994E-10, &
    -1.4294012E-10, 1.2361991E-10,-8.2740936E-11/)
 
+    ! e=dexp(.2d0), er=1.0d0/e
+    real(dp), parameter :: e=1.22140275816017_dp, er=0.818730753077982_dp
+
     public nsave, gsave, fsave
     public eval_hankel
 	
@@ -201,8 +204,6 @@ module hankel_module
     complex(dp), target :: c, cmax
     complex(dp) :: zhanks
     real(dp) :: y1, y, g
-    ! e=dexp(.2d0), er=1.0d0/e
-    real(dp), parameter :: e=1.22140275816017_dp, er=0.818730753077982_dp
     real(dp), pointer :: t(:), tmax(:)
     logical :: key
     integer :: i, isave, isave0, m, none 
@@ -237,14 +238,14 @@ module hankel_module
          fsave(nsave)=c
          gsave(nsave)=g
          call internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1, &
-                              y,e,er,t,tmax,wt0,wt1,zhanks,key)
+                              y,t,tmax,zhanks,key)
        else
          isave0=isave
          if(g == gsave(isave)) then
            c=fsave(isave)
            isave=isave+1
            call internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1, &
-                                y,e,er,t,tmax,wt0,wt1,zhanks,key)
+                                y,t,tmax,zhanks,key)
          else 
            isave=isave+1
            do while (isave <= nsave)
@@ -252,7 +253,7 @@ module hankel_module
               c=fsave(isave)
               isave=isave+1
               call internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1,y, &
-                                   e,er,t,tmax,wt0,wt1,zhanks,key)
+                                   t,tmax,zhanks,key)
               exit convoluted_block
             endif
             isave=isave+1
@@ -264,7 +265,7 @@ module hankel_module
            fsave(nsave)=c
            gsave(nsave)=g
            call internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1,y, &
-                                e,er,t,tmax,wt0,wt1,zhanks,key)
+                                t,tmax,zhanks,key)
          endif
        endif
        end block convoluted_block
@@ -276,7 +277,7 @@ module hankel_module
        fsave(nsave)=c
        gsave(nsave)=g
        call internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1,y, &
-                            e,er,t,tmax,wt0,wt1,zhanks,key)
+                            t,tmax,zhanks,key)
       endif
     enddo
     t => null()
@@ -286,17 +287,16 @@ module hankel_module
 
 !*******************************************************************************
 !>
-    subroutine internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1,y,e,er, &
-                               t,tmax,wt0,wt1,zhanks,key)
+    subroutine internal_zhanks(n,i,m,isave,none,c,cmax,tol,b,y1,y, &
+                               t,tmax,zhanks,key)
 
     implicit none
     integer :: n, i, m, isave, none
     complex(dp) :: c,cmax,zhanks
     logical :: key
     real(dp) :: b, tol
-    real(dp) :: y1,y,e,er
+    real(dp) :: y1,y
     real(dp), dimension (2) :: t,tmax
-    real(dp), dimension(283) :: wt0, wt1
 
     if(n == 0) then
      c=c*wt0(i)
