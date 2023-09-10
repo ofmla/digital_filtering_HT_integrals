@@ -61,7 +61,7 @@ program driver
   character(len=44), parameter :: fmt1 = "(a17,12x,a3,10x,a5,11x,a8,8x,a9,7x,a9,6x,7a)"
   character(len=36), parameter :: fmt2 = "(2(5x,i1),2e13.5,4e16.8,2x,i3,3x,i1)"
 
-  real(dp) :: b(9)=[.0001,.001,.005,.01,.05,.1,.5,1.,2.]
+  real(dp) :: b(9)=[.0001_dp,.001_dp,.005_dp,.01_dp,.05_dp,.1_dp,.5_dp,1._dp,2._dp]
   real(dp) :: tol(9)=[0.1e-5_dp,0.1e-5_dp,0.1e-6_dp,0.1e-7_dp,0.1e-7_dp, &
                       0.1e-7_dp,0.1e-7_dp,0.1e-8_dp,0.1e-8_dp]
   integer :: n(5)=[0,1,1,1,0]
@@ -77,7 +77,7 @@ program driver
 	! get integral 1 (use new=1)
     z=eval_hankel(0,b(i),cmplx_fun1,tol(i),nf,1)
     filt=z%re
-    exact=.5*dexp(-.25*bb)
+    exact=.5_dp*dexp(-.25_dp*bb)
     abserr=dabs(filt-exact)
     relerr=abserr/exact
     j=1
@@ -86,19 +86,19 @@ program driver
   ! get integral 2 (new=0 in eval_hankel)
     z=eval_hankel(1,b(i),cmplx_fun2,tol(i),nf,0)
     filt=z%re
-    exact=.25*b(i)*dexp(-.25*bb)
+    exact=.25_dp*b(i)*dexp(-.25_dp*bb)
     abserr=dabs(filt-exact)
     relerr=abserr/exact
     j=2
     write(stdout,fmt2)j,n(j),b(i),tol(i),exact,filt,abserr,relerr,nf,newj(j)
 	! get integral 3 (use new=1)
-    z=eval_hankel(1,b(i),cmplx_fun3,0.1*tol(i),nf,1)
+    z=eval_hankel(1,b(i),cmplx_fun3,0.1_dp*tol(i),nf,1)
     filt=z%re
     exact=(1.0_dp-1.0_dp/dsqrt(1.0_dp+bb))/b(i)
     abserr=dabs(filt-exact)
     relerr=abserr/exact
     j=3
-    write(stdout,fmt2)j,n(j),b(i),0.1*tol(i),exact,filt,abserr,relerr,nf,newj(j)
+    write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
     call saver(1,2)
 	! get integral 4 (new=0 in eval_hankel)
     z=eval_hankel(1,b(i),cmplx_fun4,0.1*tol(i),nf,0)
@@ -108,16 +108,16 @@ program driver
     abserr=dabs(filt-exact)
     relerr=abserr/exact
     j=4
-    write(stdout,fmt2)j,n(j),b(i),0.1*tol(i),exact,filt,abserr,relerr,nf,newj(j)
+    write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
     call saver(-1,1)
 	! get integral 5 (new=0 in eval_hankel)
-    z=eval_hankel(0,b(i),cmplx_fun5,0.1*tol(i),nf,0)
+    z=eval_hankel(0,b(i),cmplx_fun5,0.1_dp*tol(i),nf,0)
     filt=z%re
     exact=1.0_dp/droot4
     abserr=dabs(filt-exact)
     relerr=abserr/exact
     j=5
-    write(stdout,fmt2)j,n(j),b(i),0.1*tol(i),exact,filt,abserr,relerr,nf,newj(j)
+    write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
     write(stdout,'(a)')''
   enddo
   
@@ -142,7 +142,7 @@ program driver
   integer :: i,j,k
   
   do k=1,nsave
-    fsave(k)=cmplx(gsave(k)**i,0._dp, dp)*(fsave(k)**j)
+    fsave(k)=cmplx(gsave(k)**i,0._dp, kind=dp)*(fsave(k)**j)
   enddo
 	
   end subroutine saver 
@@ -196,7 +196,7 @@ program driver
   real(dp), intent(in) :: g
   complex(dp) :: c4
 
-  c4%re=g*dexp(-2.*g)
+  c4%re=g*dexp(-2._dp*g)
   c4%im=0._dp
     
   end function cmplx_fun4
@@ -209,7 +209,7 @@ program driver
   real(dp), intent(in) :: g
   complex(dp) :: c5
 
-  c5%re=dexp(-2.*g)
+  c5%re=dexp(-2._dp*g)
   c5%im=0._dp
     
   end function cmplx_fun5  
