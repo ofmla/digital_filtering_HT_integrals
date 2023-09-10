@@ -74,7 +74,7 @@ program driver
 
   do i=1,9
     bb=b(i)*b(i)
-	! get integral 1 (use new=1)
+    ! get integral 1 (use new=1)
     z=eval_hankel(0,b(i),cmplx_fun1,tol(i),nf,1)
     filt=z%re
     exact=.5_dp*dexp(-.25_dp*bb)
@@ -83,7 +83,7 @@ program driver
     j=1
     write(stdout,fmt2)j,n(j),b(i),tol(i),exact,filt,abserr,relerr,nf,newj(j)
     call saver(1,1)
-  ! get integral 2 (new=0 in eval_hankel)
+    ! get integral 2 (new=0 in eval_hankel)
     z=eval_hankel(1,b(i),cmplx_fun2,tol(i),nf,0)
     filt=z%re
     exact=.25_dp*b(i)*dexp(-.25_dp*bb)
@@ -91,7 +91,7 @@ program driver
     relerr=abserr/exact
     j=2
     write(stdout,fmt2)j,n(j),b(i),tol(i),exact,filt,abserr,relerr,nf,newj(j)
-	! get integral 3 (use new=1)
+    ! get integral 3 (use new=1)
     z=eval_hankel(1,b(i),cmplx_fun3,0.1_dp*tol(i),nf,1)
     filt=z%re
     exact=(1.0_dp-1.0_dp/dsqrt(1.0_dp+bb))/b(i)
@@ -100,7 +100,7 @@ program driver
     j=3
     write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
     call saver(1,2)
-	! get integral 4 (new=0 in eval_hankel)
+    ! get integral 4 (new=0 in eval_hankel)
     z=eval_hankel(1,b(i),cmplx_fun4,0.1*tol(i),nf,0)
     filt=z%re
     droot4=dsqrt(4.0_dp+bb)
@@ -110,7 +110,7 @@ program driver
     j=4
     write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
     call saver(-1,1)
-	! get integral 5 (new=0 in eval_hankel)
+    ! get integral 5 (new=0 in eval_hankel)
     z=eval_hankel(0,b(i),cmplx_fun5,0.1_dp*tol(i),nf,0)
     filt=z%re
     exact=1.0_dp/droot4
