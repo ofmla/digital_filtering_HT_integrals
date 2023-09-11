@@ -169,7 +169,7 @@ module hankel_module
    -2.5560176E-10, 2.2103233E-10,-1.9113891E-10, 1.6528994E-10, &
    -1.4294012E-10, 1.2361991E-10,-8.2740936E-11/)
 
-    ! e=dexp(.2d0), er=1.0d0/e
+    ! e=exp(.2d0), er=1.0d0/e
     real(dp), parameter :: e=1.22140275816017_dp, er=0.818730753077982_dp
 
     public nsave, gsave, fsave
