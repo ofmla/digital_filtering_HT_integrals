@@ -77,8 +77,8 @@ program driver
     ! get integral 1 (use new=1)
     z=eval_hankel(0,b(i),cmplx_fun1,tol(i),nf,1)
     filt=z%re
-    exact=.5_dp*dexp(-.25_dp*bb)
-    abserr=dabs(filt-exact)
+    exact=.5_dp*exp(-.25_dp*bb)
+    abserr=abs(filt-exact)
     relerr=abserr/exact
     j=1
     write(stdout,fmt2)j,n(j),b(i),tol(i),exact,filt,abserr,relerr,nf,newj(j)
@@ -86,16 +86,16 @@ program driver
     ! get integral 2 (new=0 in eval_hankel)
     z=eval_hankel(1,b(i),cmplx_fun2,tol(i),nf,0)
     filt=z%re
-    exact=.25_dp*b(i)*dexp(-.25_dp*bb)
-    abserr=dabs(filt-exact)
+    exact=.25_dp*b(i)*exp(-.25_dp*bb)
+    abserr=abs(filt-exact)
     relerr=abserr/exact
     j=2
     write(stdout,fmt2)j,n(j),b(i),tol(i),exact,filt,abserr,relerr,nf,newj(j)
     ! get integral 3 (use new=1)
     z=eval_hankel(1,b(i),cmplx_fun3,0.1_dp*tol(i),nf,1)
     filt=z%re
-    exact=(1.0_dp-1.0_dp/dsqrt(1.0_dp+bb))/b(i)
-    abserr=dabs(filt-exact)
+    exact=(1.0_dp-1.0_dp/sqrt(1.0_dp+bb))/b(i)
+    abserr=abs(filt-exact)
     relerr=abserr/exact
     j=3
     write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
@@ -103,9 +103,9 @@ program driver
     ! get integral 4 (new=0 in eval_hankel)
     z=eval_hankel(1,b(i),cmplx_fun4,0.1*tol(i),nf,0)
     filt=z%re
-    droot4=dsqrt(4.0_dp+bb)
+    droot4=sqrt(4.0_dp+bb)
     exact=b(i)/droot4**3
-    abserr=dabs(filt-exact)
+    abserr=abs(filt-exact)
     relerr=abserr/exact
     j=4
     write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
@@ -114,7 +114,7 @@ program driver
     z=eval_hankel(0,b(i),cmplx_fun5,0.1_dp*tol(i),nf,0)
     filt=z%re
     exact=1.0_dp/droot4
-    abserr=dabs(filt-exact)
+    abserr=abs(filt-exact)
     relerr=abserr/exact
     j=5
     write(stdout,fmt2)j,n(j),b(i),0.1_dp*tol(i),exact,filt,abserr,relerr,nf,newj(j)
@@ -155,7 +155,7 @@ program driver
   real(dp), intent(in) :: g
   complex(dp) :: c1
 
-  c1%re=g*dexp(-g*g)
+  c1%re=g*exp(-g*g)
   c1%im=0._dp
 	
   end function cmplx_fun1
@@ -170,7 +170,7 @@ program driver
   complex(dp) :: c2
 
   g2=g*g
-  c2%re=g2*dexp(-g2)
+  c2%re=g2*exp(-g2)
   c2%im=0._dp
 
   end function cmplx_fun2
@@ -183,7 +183,7 @@ program driver
   real(dp), intent(in) :: g
   complex(dp) :: c3
     
-  c3%re=dexp(-g)
+  c3%re=exp(-g)
   c3%im=0._dp
     
   end function cmplx_fun3
@@ -196,7 +196,7 @@ program driver
   real(dp), intent(in) :: g
   complex(dp) :: c4
 
-  c4%re=g*dexp(-2._dp*g)
+  c4%re=g*exp(-2._dp*g)
   c4%im=0._dp
     
   end function cmplx_fun4
@@ -209,7 +209,7 @@ program driver
   real(dp), intent(in) :: g
   complex(dp) :: c5
 
-  c5%re=dexp(-2._dp*g)
+  c5%re=exp(-2._dp*g)
   c5%im=0._dp
     
   end function cmplx_fun5  
